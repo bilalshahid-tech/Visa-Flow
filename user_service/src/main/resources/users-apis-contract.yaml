@@ -1,0 +1,772 @@
+openapi: 3.0.0
+info:
+  title: VisaFlow User Service API
+  description: User profiles, company management, and subscription plans
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8082/api/users
+    description: Local development
+
+tags:
+  - name: Companies
+    description: Company onboarding and management
+  - name: Profiles
+    description: User profiles (consultants, clients)
+  - name: Subscriptions
+    description: Subscription plan management
+  - name: Admin
+    description: Admin operations for tenant management
+  - name: Internal
+    description: Service-to-service communication
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # Company DTOs
+    CompanyCreateRequest:
+      type: object
+      required:
+        - name
+        - email
+        - phone
+      properties:
+        name:
+          type: string
+          example: "Global Visa Consultants"
+        taxId:
+          type: string
+          example: "123456789"
+        email:
+          type: string
+          format: email
+          example: "contact@globalvisa.com"
+        phone:
+          type: string
+          example: "+1-234-567-8900"
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            postalCode:
+              type: string
+        website:
+          type: string
+          example: "https://globalvisa.com"
+        logo:
+          type: string
+          format: uri
+        timezone:
+          type: string
+          default: "UTC"
+        language:
+          type: string
+          default: "en"
+
+    CompanyResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        taxId:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: object
+        website:
+          type: string
+        logoUrl:
+          type: string
+        subscription:
+          $ref: '#/components/schemas/SubscriptionSummary'
+        status:
+          type: string
+          enum: [ACTIVE, SUSPENDED, PENDING]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        stats:
+          type: object
+          properties:
+            totalUsers:
+              type: integer
+            totalCases:
+              type: integer
+            totalConsultants:
+              type: integer
+            totalClients:
+              type: integer
+
+    CompanyUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+        address:
+          type: object
+        website:
+          type: string
+        logo:
+          type: string
+        timezone:
+          type: string
+        language:
+          type: string
+
+    # Profile DTOs
+    ProfileResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        companyId:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [ADMIN, CONSULTANT, CLIENT]
+        position:
+          type: string
+          example: "Senior Visa Consultant"
+        department:
+          type: string
+          example: "Student Visa Team"
+        phoneNumber:
+          type: string
+        avatarUrl:
+          type: string
+        language:
+          type: string
+        timezone:
+          type: string
+        emailVerified:
+          type: boolean
+        lastActive:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          additionalProperties: true
+
+    ProfileUpdateRequest:
+      type: object
+      properties:
+        position:
+          type: string
+        department:
+          type: string
+        phoneNumber:
+          type: string
+        avatarUrl:
+          type: string
+        language:
+          type: string
+        timezone:
+          type: string
+        metadata:
+          type: object
+
+    # Subscription DTOs
+    SubscriptionPlan:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          enum: [FREE, BASIC, PROFESSIONAL, ENTERPRISE]
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+          default: "USD"
+        interval:
+          type: string
+          enum: [monthly, yearly]
+        features:
+          type: object
+          properties:
+            maxUsers:
+              type: integer
+            maxCases:
+              type: integer
+            maxDocuments:
+              type: integer
+            storageGB:
+              type: integer
+            apiAccess:
+              type: boolean
+            advancedAnalytics:
+              type: boolean
+            prioritySupport:
+              type: boolean
+            customBranding:
+              type: boolean
+
+    SubscriptionCreateRequest:
+      type: object
+      required:
+        - planId
+        - interval
+      properties:
+        planId:
+          type: string
+        interval:
+          type: string
+          enum: [monthly, yearly]
+        paymentMethodId:
+          type: string
+        promoCode:
+          type: string
+
+    SubscriptionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        companyId:
+          type: string
+        plan:
+          $ref: '#/components/schemas/SubscriptionPlan'
+        status:
+          type: string
+          enum: [ACTIVE, PAST_DUE, CANCELED, EXPIRED]
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        autoRenew:
+          type: boolean
+        trialEndsAt:
+          type: string
+          format: date-time
+        cancelledAt:
+          type: string
+          format: date-time
+        paymentMethod:
+          type: object
+        invoices:
+          type: array
+          items:
+            type: object
+
+    # Invitation DTOs
+    InviteUserRequest:
+      type: object
+      required:
+        - email
+        - role
+      properties:
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [CONSULTANT, CLIENT]
+        position:
+          type: string
+        message:
+          type: string
+
+    InvitationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        invitedBy:
+          type: object
+        companyId:
+          type: string
+        token:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [PENDING, ACCEPTED, EXPIRED]
+
+    # Admin DTOs
+    TenantStatsResponse:
+      type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/CompanyResponse'
+        totalUsers:
+          type: integer
+        activeToday:
+          type: integer
+        activeThisWeek:
+          type: integer
+        totalCases:
+          type: integer
+        storageUsed:
+          type: integer
+        apiCalls:
+          type: integer
+        subscription:
+          $ref: '#/components/schemas/SubscriptionResponse'
+        recentActivities:
+          type: array
+          items:
+            type: object
+
+    # Internal DTOs
+    InternalCompanyValidationRequest:
+      type: object
+      required:
+        - companyId
+      properties:
+        companyId:
+          type: string
+          format: uuid
+        requiredFeature:
+          type: string
+
+    InternalCompanyValidationResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        company:
+          $ref: '#/components/schemas/CompanyResponse'
+        subscription:
+          $ref: '#/components/schemas/SubscriptionResponse'
+        withinLimits:
+          type: object
+          properties:
+            users:
+              type: boolean
+            cases:
+              type: boolean
+            storage:
+              type: boolean
+
+paths:
+  # Company Endpoints
+  /companies:
+    post:
+      tags: [Companies]
+      summary: Create a new company (onboarding)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyCreateRequest'
+      responses:
+        '201':
+          description: Company created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResponse'
+        '400':
+          description: Validation error
+        '409':
+          description: Company with this email already exists
+
+  /companies/my:
+    get:
+      tags: [Companies]
+      summary: Get current user's company
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Company details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResponse'
+        '404':
+          description: Company not found
+
+    put:
+      tags: [Companies]
+      summary: Update current user's company
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyUpdateRequest'
+      responses:
+        '200':
+          description: Company updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResponse'
+
+  /companies/{companyId}/users:
+    get:
+      tags: [Companies]
+      summary: Get all users in company
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: role
+          in: query
+          schema:
+            type: string
+            enum: [ADMIN, CONSULTANT, CLIENT]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProfileResponse'
+                  totalElements:
+                    type: integer
+                  totalPages:
+                    type: integer
+
+  # Profile Endpoints
+  /profiles/me:
+    get:
+      tags: [Profiles]
+      summary: Get current user profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        '404':
+          description: Profile not found
+
+    put:
+      tags: [Profiles]
+      summary: Update current user profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequest'
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+
+  /profiles/{userId}:
+    get:
+      tags: [Profiles]
+      summary: Get profile by user ID (admin/consultant only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        '403':
+          description: Not authorized
+        '404':
+          description: Profile not found
+
+  # Subscription Endpoints
+  /subscriptions/plans:
+    get:
+      tags: [Subscriptions]
+      summary: Get all available subscription plans
+      responses:
+        '200':
+          description: List of plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionPlan'
+
+  /subscriptions/current:
+    get:
+      tags: [Subscriptions]
+      summary: Get current company subscription
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+
+    post:
+      tags: [Subscriptions]
+      summary: Create or update subscription
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreateRequest'
+      responses:
+        '200':
+          description: Subscription updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+
+  /subscriptions/cancel:
+    post:
+      tags: [Subscriptions]
+      summary: Cancel current subscription
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Subscription cancelled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  effectiveDate:
+                    type: string
+                    format: date-time
+
+  # Invitation Endpoints
+  /invitations:
+    post:
+      tags: [Companies]
+      summary: Invite user to company
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteUserRequest'
+      responses:
+        '201':
+          description: Invitation sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitationResponse'
+
+  /invitations/accept:
+    post:
+      tags: [Companies]
+      summary: Accept invitation with token
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Invitation accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  userId:
+                    type: string
+                  companyId:
+                    type: string
+
+  # Admin Endpoints
+  /admin/tenants/{companyId}/stats:
+    get:
+      tags: [Admin]
+      summary: Get detailed tenant statistics
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tenant stats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantStatsResponse'
+
+  /admin/tenants:
+    get:
+      tags: [Admin]
+      summary: List all tenants (paginated)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: size
+          in: query
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [ACTIVE, SUSPENDED, PENDING]
+      responses:
+        '200':
+          description: List of tenants
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CompanyResponse'
+                  totalElements:
+                    type: integer
+
+  # Internal Endpoints
+  /internal/companies/validate:
+    post:
+      tags: [Internal]
+      summary: Validate company and check limits
+      parameters:
+        - name: X-API-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalCompanyValidationRequest'
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalCompanyValidationResponse'
+
+  /internal/profiles/batch:
+    post:
+      tags: [Internal]
+      summary: Get multiple profiles by user IDs
+      parameters:
+        - name: X-API-Key
+          in: header
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userIds:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: List of profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProfileResponse'

@@ -1,15 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="afee0d37-00b6-4b3c-ab70-6b9b4f6a1d6c" name="Changes" comment="" />
+    <list default="true" id="afee0d37-00b6-4b3c-ab70-6b9b4f6a1d6c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/VisaFlow_README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/main/resources/auth-apis-contract.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/auth_service/src/main/resources/auth-apis-contract.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/AuthApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/config/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/controller/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/controller/InternalAuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/controller/PasswordController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/controller/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/AuthResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/ChangePasswordRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/ErrorResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/ForgotPasswordRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/InternalUserValidationRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/InternalUserValidationResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/LoginRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/RefreshTokenRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/RegisterRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/ResetPasswordRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/UserDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/VerifyEmailRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/exception/InvalidCredentialsException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/exception/ResourceNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/exception/TokenRefreshException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/exception/UserAlreadyExistsException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/kafka/AuthEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/kafka/AuthEventProducer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/Company.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/EmailVerificationToken.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/LoginHistory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/PasswordResetToken.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/RefreshToken.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/CompanyRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/EmailVerificationTokenRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/LoginHistoryRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/PasswordResetTokenRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/RefreshTokenRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/security/JwtAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/security/JwtService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/security/UserDetailsServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/AuthenticationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/EmailVerificationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/InternalAuthService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/PasswordResetService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/RefreshTokenService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/resources/auth-apis-contract.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/resources/db/migration/V1__init_schema.sql" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="3Atrw7TAgFFCkIwpX9hBhSfrkXv" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -20,6 +79,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "to.speed.mode.migration.done": "true"
