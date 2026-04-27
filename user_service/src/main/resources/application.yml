@@ -14,10 +14,10 @@ spring:
       properties:
         spring.json.trusted.packages: "*"
   application:
-    name: authservice
+    name: user-service
 
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/visaflow_users}
+    url: ${DB_URL:jdbc:postgresql://postgres:5432/visaflow_users}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:18122003rb}
     driver-class-name: org.postgresql.Driver

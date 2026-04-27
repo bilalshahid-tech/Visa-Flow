@@ -20,53 +20,95 @@ public class TenantService {
 
     private final CompanyRepository companyRepository;
     private final ProfileRepository profileRepository;
-    private final CompanyService companyService;
     private final SubscriptionService subscriptionService;
 
     @Transactional(readOnly = true)
     public TenantStatsResponse getTenantStats(UUID companyId) {
-        CompanyResponse companyResp = companyService.getMyCompany(companyId);
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        // Create CompanyResponse using constructor (record)
+        CompanyResponse companyResp = new CompanyResponse(
+                company.getId(),
+                company.getName(),
+                company.getTaxId(),
+                company.getEmail(),
+                company.getPhone(),
+                company.getAddress(),
+                company.getWebsite(),
+                company.getLogoUrl(),
+                null, // subscription summary - can be populated later
+                company.getStatus() != null ? company.getStatus().toString() : "ACTIVE",
+                company.getCreatedAt(),
+                company.getUpdatedAt(),
+                null // stats - can be populated later
+        );
+
         SubscriptionResponse subResp = subscriptionService.getCurrentSubscription(companyId);
 
         List<Profile> profiles = profileRepository.findByCompanyId(companyId);
         int totalUsers = profiles.size();
 
         return new TenantStatsResponse(
-            companyResp,
-            totalUsers,
-            1, // mocked active today
-            totalUsers, // mocked active this week
-            10, // mocked cases
-            5, // mocked storage
-            100, // mocked API calls
-            subResp,
-            List.of() // recent activities
+                companyResp,
+                totalUsers,
+                1,
+                totalUsers,
+                10,
+                5,
+                100,
+                subResp,
+                List.of()
         );
     }
 
     @Transactional(readOnly = true)
     public Page<CompanyResponse> getAllTenants(String status, Pageable pageable) {
-        Page<Company> companies = companyRepository.findAll(pageable); // Could filter by status if applied
-        return companies.map(companyService::getMyCompany); // Simplified for now since we just delegate
+        Page<Company> companies = companyRepository.findAll(pageable);
+        return companies.map(company -> new CompanyResponse(
+                company.getId(),
+                company.getName(),
+                company.getTaxId(),
+                company.getEmail(),
+                company.getPhone(),
+                company.getAddress(),
+                company.getWebsite(),
+                company.getLogoUrl(),
+                null,
+                company.getStatus() != null ? company.getStatus().toString() : "ACTIVE",
+                company.getCreatedAt(),
+                company.getUpdatedAt(),
+                null
+        ));
     }
 
     @Transactional(readOnly = true)
     public InternalCompanyValidationResponse validateCompany(UUID companyId, String feature) {
-        CompanyResponse company = companyService.getMyCompany(companyId);
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        CompanyResponse companyResp = new CompanyResponse(
+                company.getId(),
+                company.getName(),
+                company.getTaxId(),
+                company.getEmail(),
+                company.getPhone(),
+                company.getAddress(),
+                company.getWebsite(),
+                company.getLogoUrl(),
+                null,
+                company.getStatus() != null ? company.getStatus().toString() : "ACTIVE",
+                company.getCreatedAt(),
+                company.getUpdatedAt(),
+                null
+        );
+
         SubscriptionResponse subResp = subscriptionService.getCurrentSubscription(companyId);
-        
-        // Simple mock of limits check
+
         LimitsCheck check = new LimitsCheck(true, true, true);
-        
-        // Validate feature logic could be expanded based on plan features
+
         boolean isValid = subResp != null && "ACTIVE".equals(subResp.status());
-        if (feature != null && subResp != null) {
-            SubscriptionFeatures features = subResp.plan().features();
-            if ("apiAccess".equals(feature) && (features.apiAccess() == null || !features.apiAccess())) {
-                isValid = false;
-            }
-        }
-        
-        return new InternalCompanyValidationResponse(isValid, company, subResp, check);
+
+        return new InternalCompanyValidationResponse(isValid, companyResp, subResp, check);
     }
 }

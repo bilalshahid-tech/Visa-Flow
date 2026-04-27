@@ -1090,5 +1090,42 @@
                 }
             ]
         }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8080",
+            "type": "string"
+        },
+        {
+            "key": "auth_url",
+            "value": "http://localhost:8080",
+            "type": "string"
+        },
+        {
+            "key": "admin_token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "consultant_token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "client_token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "company_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "invitation_token",
+            "value": "",
+            "type": "string"
+        }
     ]
 }

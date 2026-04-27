@@ -5,58 +5,63 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="afee0d37-00b6-4b3c-ab70-6b9b4f6a1d6c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/VisaFlow_README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth_service/src/main/resources/auth-apis-contract.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/auth_service/src/main/resources/auth-apis-contract.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/AuthApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/config/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/controller/AuthController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/controller/InternalAuthController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/controller/PasswordController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/controller/UserController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/AuthResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/ChangePasswordRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/ErrorResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/ForgotPasswordRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/InternalUserValidationRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/InternalUserValidationResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/LoginRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/RefreshTokenRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/RegisterRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/ResetPasswordRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/UserDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/dto/VerifyEmailRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/exception/GlobalExceptionHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/exception/InvalidCredentialsException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/exception/ResourceNotFoundException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/exception/TokenRefreshException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/exception/UserAlreadyExistsException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/kafka/AuthEvent.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/kafka/AuthEventProducer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/Company.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/EmailVerificationToken.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/LoginHistory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/PasswordResetToken.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/RefreshToken.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/Role.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/model/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/CompanyRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/EmailVerificationTokenRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/LoginHistoryRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/PasswordResetTokenRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/RefreshTokenRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/repository/UserRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/security/JwtAuthenticationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/security/JwtService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/security/UserDetailsServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/AuthenticationService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/EmailVerificationService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/InternalAuthService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/PasswordResetService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/RefreshTokenService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/auth/service/UserService.java" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/user/UserServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth_service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth_service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/com/visaflow/auth/DemoApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/com/visaflow/auth/controller/AuthControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/com/visaflow/auth/security/JwtServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/com/visaflow/auth/service/AuthenticationServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/api/AuthenticationApiTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/api/InternalApiTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/api/PasswordManagementApiTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/api/UserManagementApiTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/AuthResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/ChangePasswordRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/ErrorResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/ForgotPassword200ResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/ForgotPasswordRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/InternalUserValidationRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/InternalUserValidationResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/LoginRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/Logout200ResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/RefreshToken200ResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/RefreshTokenRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/RegisterRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/ResetPasswordRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/UpdateCurrentUserRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/UserDTOTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_service/src/test/java/org/openapitools/client/model/VerifyEmailRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/VisaFlow-User-Service.postman_collection.json" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/VisaFlow-User-Service.postman_collection.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/user/service/TenantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/java/com/visaflow/user/service/TenantService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user_service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/user_service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/resources/auth-apis-contract.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_service/src/main/resources/db/migration/V1__init_schema.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/com/visaflow/auth/DemoApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/com/visaflow/auth/controller/AuthControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/com/visaflow/auth/security/JwtServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/com/visaflow/auth/service/AuthenticationServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/api/AuthenticationApiTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/api/InternalApiTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/api/PasswordManagementApiTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/api/UserManagementApiTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/AuthResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/ChangePasswordRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/ErrorResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/ForgotPassword200ResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/ForgotPasswordRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/InternalUserValidationRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/InternalUserValidationResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/LoginRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/Logout200ResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/RefreshToken200ResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/RefreshTokenRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/RegisterRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/ResetPasswordRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/UpdateCurrentUserRequestTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/UserDTOTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_service/src/test/java/org/openapitools/client/model/VerifyEmailRequestTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,17 +79,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "to.speed.mode.migration.done": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvnw.cmd spring-boot:run" />
+    </option>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
