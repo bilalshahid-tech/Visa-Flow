@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.visaflow</groupId>
+    <artifactId>visaflow-parent</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>VisaFlow Parent</name>
+    <description>Parent POM for VisaFlow Microservices</description>
+
+    <modules>
+        <module>visaflow-backend</module>
+    </modules>
+
+    <properties>
+        <java.version>17</java.version>
+        <spring-boot.version>3.4.1</spring-boot.version>
+        <visaflow.version>1.0.0</visaflow.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.visaflow</groupId>
+                <artifactId>visaflow-common</artifactId>
+                <version>${visaflow.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

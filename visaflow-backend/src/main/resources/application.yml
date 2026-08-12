@@ -1,0 +1,73 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: visaflow-backend
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/visaflow_db
+    username: ${POSTGRES_USER:visaflow}
+    password: ${POSTGRES_PASSWORD:visaflow}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: public
+        format_sql: false
+    show-sql: false
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    out-of-order: false
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 25MB
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      expiration: 86400000       # 1 day in ms
+      refresh-token:
+        expiration: 604800000    # 7 days in ms
+
+  file:
+    upload-dir: ${FILE_UPLOAD_DIR:/app/uploads}
+
+  storage:
+    endpoint: ${MINIO_ENDPOINT:http://minio:9000}
+    access-key: ${MINIO_ACCESS_KEY:visaflow}
+    secret-key: ${MINIO_SECRET_KEY:visaflow123}
+    bucket: ${MINIO_BUCKET:visaflow-documents}
+
+logging:
+  level:
+    com.visaflow: INFO
+    org.springframework.security: WARN
