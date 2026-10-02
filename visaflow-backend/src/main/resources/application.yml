@@ -1,12 +1,12 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   application:
     name: visaflow-backend
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/visaflow_db
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres:5432/visaflow_db}
     username: ${POSTGRES_USER:visaflow}
     password: ${POSTGRES_PASSWORD:visaflow}
     driver-class-name: org.postgresql.Driver
@@ -70,7 +70,17 @@ application:
     secret-key: ${MINIO_SECRET_KEY:visaflow123}
     bucket: ${MINIO_BUCKET:visaflow-documents}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
 logging:
   level:
     com.visaflow: INFO
     org.springframework.security: WARN
+
