@@ -36,6 +36,20 @@ public class VisaCase {
     @JoinColumn(name = "visa_type_id", nullable = true)
     private VisaType visaType;
 
+    /** New: points to the selected VisaProgram (null for cases created before migration) */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "visa_program_id", nullable = true)
+    private VisaProgram visaProgram;
+
+    /** New: the stage the case is currently in (null for pre-migration cases) */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "current_stage_id", nullable = true)
+    private VisaProgramStage currentStage;
+
+    /** New: drives conditional document requirements (e.g. TOURISM) */
+    @Column(name = "job_role_category", length = 60)
+    private String jobRoleCategory;
+
     @Column(name = "assigned_staff_id")
     private UUID assignedStaffId;
 
@@ -76,4 +90,9 @@ public class VisaCase {
     @OneToMany(mappedBy = "visaCase", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<CaseNote> caseNotes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "visaCase", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("enteredAt ASC")
+    @Builder.Default
+    private List<CaseStageHistory> stageHistory = new ArrayList<>();
 }

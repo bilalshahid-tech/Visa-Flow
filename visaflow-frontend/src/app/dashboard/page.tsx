@@ -85,7 +85,7 @@ export default function DashboardHome() {
           </div>
 
           {loading ? (
-            <div style={styles.loading}>Spinning metrics engine...</div>
+            <div style={styles.loading}>Loading dashboard metrics...</div>
           ) : recentCases.length === 0 ? (
             <div style={styles.empty}>
               <p>No cases registered to your firm workspace.</p>
@@ -99,7 +99,7 @@ export default function DashboardHome() {
                 <div key={i} style={styles.caseItem}>
                   <div>
                     <h4 style={styles.caseRef}>{c.caseReference}</h4>
-                    <span style={styles.caseSub}>Applicant ID: {c.applicantId.substring(0, 8)}... | Type: {c.visaType}</span>
+                    <span style={styles.caseSub}>Applicant ID: {c.applicantId ? c.applicantId.substring(0, 8) + '...' : 'N/A'} | Type: {c.visaType ?? '—'}</span>
                   </div>
                   <div style={styles.rightSide}>
                     <span className={`badge badge-medium`} style={{ display: 'inline-block' }}>{c.status}</span>
@@ -113,32 +113,32 @@ export default function DashboardHome() {
           )}
         </div>
 
-        {/* Platform Heuristics Side Panel */}
+        {/* System Health & Security Side Panel */}
         <div className="glass-card" style={styles.sideWidget}>
-          <h3 style={styles.widgetTitle} style={{ marginBottom: '16px' }}>Service Node Telemetry</h3>
+          <h3 style={{ ...styles.widgetTitle, marginBottom: '16px' }}>System Health & Security</h3>
           <div style={styles.telemetryList}>
             <div style={styles.telemetryItem}>
-              <span style={styles.nodeName}>Flyway Migrations</span>
-              <span style={styles.nodeStatusSuccess}>schema up-to-date</span>
+              <span style={styles.nodeName}>Database Connection</span>
+              <span style={styles.nodeStatusSuccess}>connected & healthy</span>
             </div>
             <div style={styles.telemetryItem}>
-              <span style={styles.nodeName}>Application Events</span>
-              <span style={styles.nodeStatusSuccess}>in-process binding</span>
+              <span style={styles.nodeName}>Application Services</span>
+              <span style={styles.nodeStatusSuccess}>operational</span>
             </div>
             <div style={styles.telemetryItem}>
-              <span style={styles.nodeName}>PostgreSQL Connections</span>
-              <span style={styles.nodeStatusSuccess}>active (schema-isolated)</span>
+              <span style={styles.nodeName}>Data Security</span>
+              <span style={styles.nodeStatusSuccess}>isolated & encrypted</span>
             </div>
             <div style={styles.telemetryItem}>
-              <span style={styles.nodeName}>Document Security Isolation</span>
-              <span style={styles.nodeStatusSuccess}>tenant encrypted</span>
+              <span style={styles.nodeName}>Document Vault</span>
+              <span style={styles.nodeStatusSuccess}>protected</span>
             </div>
           </div>
           
           <div style={styles.featureSplash}>
-            <h4 style={{ color: '#fff', fontSize: '0.9rem', marginBottom: '4px' }}>Modular Monolith Consolidation</h4>
+            <h4 style={{ color: '#fff', fontSize: '0.9rem', marginBottom: '4px' }}>Automated Case Processing</h4>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', lineHeight: '1.4' }}>
-              The engine replaces standard Kafka and gateway bounds inside a single optimized JVM execution ring.
+              All visa application stages, client documents, and status updates are managed seamlessly in real time.
             </p>
           </div>
         </div>

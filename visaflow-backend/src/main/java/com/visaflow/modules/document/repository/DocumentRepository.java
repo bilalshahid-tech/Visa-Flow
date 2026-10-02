@@ -14,4 +14,5 @@ public interface DocumentRepository extends JpaRepository<Document, UUID> {
     Page<Document> findByCaseIdAndCompanyId(UUID caseId, UUID companyId, Pageable pageable);
     List<Document> findByCaseIdAndCompanyIdAndStatus(UUID caseId, UUID companyId, DocumentStatus status);
     Optional<Document> findByIdAndCompanyId(UUID id, UUID companyId);
+    List<Document> findByCaseIdIn(List<UUID> caseIds);
 }

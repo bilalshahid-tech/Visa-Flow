@@ -47,8 +47,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 20MB
-      max-request-size: 25MB
+      max-file-size: 50MB
+      max-request-size: 55MB
 
 application:
   security:
@@ -59,10 +59,13 @@ application:
         expiration: 604800000    # 7 days in ms
 
   file:
-    upload-dir: ${FILE_UPLOAD_DIR:/app/uploads}
+    upload-dir: ${FILE_UPLOAD_DIR:./uploads}
+
+  base-url: ${APP_BASE_URL:http://localhost:8080}
 
   storage:
     endpoint: ${MINIO_ENDPOINT:http://minio:9000}
+    external-url: ${MINIO_EXTERNAL_URL:http://localhost:9000}
     access-key: ${MINIO_ACCESS_KEY:visaflow}
     secret-key: ${MINIO_SECRET_KEY:visaflow123}
     bucket: ${MINIO_BUCKET:visaflow-documents}

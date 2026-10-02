@@ -6,7 +6,8 @@ WORKDIR /app
 COPY pom.xml ./
 COPY visaflow-backend/ ./visaflow-backend/
 
-RUN mvn -pl visaflow-backend package -DskipTests --no-transfer-progress
+RUN --mount=type=cache,target=/root/.m2 \
+    mvn -pl visaflow-backend clean package -DskipTests --no-transfer-progress
 
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jre-jammy

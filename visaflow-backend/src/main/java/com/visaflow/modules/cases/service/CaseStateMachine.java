@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
 public class CaseStateMachine {
 
     private static final Map<CaseStatus, Set<CaseStatus>> ALLOWED = Map.of(
-        CaseStatus.DRAFT,        EnumSet.of(CaseStatus.DOCS_PENDING),
-        CaseStatus.DOCS_PENDING, EnumSet.of(CaseStatus.UNDER_REVIEW, CaseStatus.DRAFT),
-        CaseStatus.UNDER_REVIEW, EnumSet.of(CaseStatus.SUBMITTED, CaseStatus.DOCS_PENDING),
-        CaseStatus.SUBMITTED,    EnumSet.of(CaseStatus.APPROVED, CaseStatus.REJECTED),
-        CaseStatus.APPROVED,     EnumSet.of(CaseStatus.CLOSED),
-        CaseStatus.REJECTED,     EnumSet.of(CaseStatus.CLOSED, CaseStatus.DOCS_PENDING),
-        CaseStatus.CLOSED,       EnumSet.noneOf(CaseStatus.class)
+        CaseStatus.DRAFT,        EnumSet.of(CaseStatus.DOCS_PENDING, CaseStatus.UNDER_REVIEW, CaseStatus.SUBMITTED),
+        CaseStatus.DOCS_PENDING, EnumSet.of(CaseStatus.UNDER_REVIEW, CaseStatus.SUBMITTED, CaseStatus.DRAFT),
+        CaseStatus.UNDER_REVIEW, EnumSet.of(CaseStatus.SUBMITTED, CaseStatus.DOCS_PENDING, CaseStatus.APPROVED, CaseStatus.REJECTED),
+        CaseStatus.SUBMITTED,    EnumSet.of(CaseStatus.APPROVED, CaseStatus.REJECTED, CaseStatus.UNDER_REVIEW, CaseStatus.DOCS_PENDING),
+        CaseStatus.APPROVED,     EnumSet.of(CaseStatus.CLOSED, CaseStatus.SUBMITTED),
+        CaseStatus.REJECTED,     EnumSet.of(CaseStatus.CLOSED, CaseStatus.DOCS_PENDING, CaseStatus.UNDER_REVIEW),
+        CaseStatus.CLOSED,       EnumSet.of(CaseStatus.DRAFT, CaseStatus.DOCS_PENDING, CaseStatus.UNDER_REVIEW)
     );
 
     /**

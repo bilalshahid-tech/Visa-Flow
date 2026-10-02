@@ -4,7 +4,9 @@ import com.visaflow.common.event.DocumentEvent;
 import com.visaflow.common.storage.StorageService;
 import com.visaflow.modules.auth.security.UserPrincipal;
 import com.visaflow.modules.cases.entity.DocumentRequirement;
+import com.visaflow.modules.cases.entity.StageDocumentRequirement;
 import com.visaflow.modules.cases.repository.DocumentRequirementRepository;
+import com.visaflow.modules.cases.repository.StageDocumentRequirementRepository;
 import com.visaflow.modules.cases.repository.VisaCaseRepository;
 import com.visaflow.modules.document.dto.DocumentReviewRequest;
 import com.visaflow.modules.document.entity.Document;
@@ -31,7 +33,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DocumentService {
 
-    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+    private static final long MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
     private static final Set<String> ALLOWED_MIME_TYPES = Set.of(
             "image/jpeg", "image/png", "image/gif", "image/webp", "application/pdf"
     );
@@ -39,6 +41,7 @@ public class DocumentService {
     private final DocumentRepository documentRepository;
     private final VisaCaseRepository caseRepository;
     private final DocumentRequirementRepository requirementRepository;
+    private final StageDocumentRequirementRepository stageRequirementRepository;
     private final StorageService storageService;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -47,8 +50,8 @@ public class DocumentService {
     // -------------------------------------------------------------------------
 
     @Transactional
-    public Document uploadDocument(UUID caseId, UUID requirementId, MultipartFile file,
-                                   UserPrincipal principal) throws IOException {
+    public Document uploadDocument(UUID caseId, UUID requirementId, UUID stageDocumentRequirementId,
+                                   MultipartFile file, UserPrincipal principal) throws IOException {
         // Tenant isolation: case must belong to principal's company
         var visaCase = caseRepository.findByIdAndCompanyId(caseId, principal.getCompanyId())
                 .orElseThrow(() -> new AccessDeniedException("Case not found or access denied"));
@@ -61,34 +64,51 @@ public class DocumentService {
 
         // Validate size
         if (file.getSize() > MAX_FILE_SIZE) {
-            throw new IllegalArgumentException("File exceeds maximum allowed size of 10 MB.");
+            throw new IllegalArgumentException("File exceeds maximum allowed size of 50 MB.");
         }
 
-        // Derive document type from requirement if present
+        // Resolve legacy flat requirement (if provided)
         DocumentRequirement req = null;
         if (requirementId != null) {
             req = requirementRepository.findById(requirementId)
                     .orElseThrow(() -> new EntityNotFoundException("Document requirement not found: " + requirementId));
         }
 
+        // Resolve new stage requirement (if provided)
+        StageDocumentRequirement stageReq = null;
+        if (stageDocumentRequirementId != null) {
+            stageReq = stageRequirementRepository.findById(stageDocumentRequirementId)
+                    .orElseThrow(() -> new EntityNotFoundException("Stage document requirement not found: " + stageDocumentRequirementId));
+        }
+
         String extension = getExtension(file.getOriginalFilename());
-        String storageKey = String.format("companies/%s/cases/%s/%s%s",
-                principal.getCompanyId(), caseId, UUID.randomUUID(), extension);
+        String rawFilename = UUID.randomUUID() + extension;
+        String storageKey = String.format("companies/%s/cases/%s/%s",
+                principal.getCompanyId(), caseId, rawFilename);
 
         storageService.upload(storageKey, file.getInputStream(), file.getSize(), mimeType);
+
+        // Determine document type: prefer stageReq, then legacy req, then OTHER
+        DocumentType docType = DocumentType.OTHER;
+        if (stageReq != null) {
+            docType = safeDocumentType(stageReq.getDocumentType());
+        } else if (req != null) {
+            docType = safeDocumentType(req.getDocumentClass());
+        }
 
         Document doc = Document.builder()
                 .companyId(principal.getCompanyId())
                 .caseId(caseId)
                 .uploadedBy(principal.getUserId())
                 .requirementId(req != null ? req.getId() : null)
+                .stageDocumentRequirementId(stageReq != null ? stageReq.getId() : null)
                 .originalFilename(file.getOriginalFilename())
+                .storedFilename(rawFilename)
+                .filePath(storageKey)
                 .storageKey(storageKey)
                 .fileSize(file.getSize())
                 .mimeType(mimeType)
-                .documentType(req != null
-                        ? DocumentType.valueOf(req.getDocumentClass())
-                        : DocumentType.OTHER)
+                .documentType(docType)
                 .status(DocumentStatus.PENDING_REVIEW)
                 .build();
 
@@ -170,5 +190,16 @@ public class DocumentService {
     private String getExtension(String filename) {
         if (filename == null || !filename.contains(".")) return "";
         return filename.substring(filename.lastIndexOf('.'));
+    }
+
+    /** Converts a documentClass string to a DocumentType enum, falling back to OTHER on unknown values. */
+    private DocumentType safeDocumentType(String documentClass) {
+        if (documentClass == null) return DocumentType.OTHER;
+        try {
+            return DocumentType.valueOf(documentClass);
+        } catch (IllegalArgumentException e) {
+            log.warn("Unknown documentClass '{}' — defaulting to DocumentType.OTHER", documentClass);
+            return DocumentType.OTHER;
+        }
     }
 }

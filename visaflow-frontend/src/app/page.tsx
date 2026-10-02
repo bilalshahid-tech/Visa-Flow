@@ -14,7 +14,6 @@ export default function LandingPage() {
       <header style={styles.header}>
         <div style={styles.logoSec}>
           <span style={styles.logoText}>VisaFlow</span>
-          <span style={styles.tag}>Modular Monolith</span>
         </div>
         <div style={styles.navActions}>
           <Link href="/login" style={styles.logoLink} className="btn-secondary">
@@ -29,19 +28,19 @@ export default function LandingPage() {
       {/* Hero Body */}
       <section style={styles.hero}>
         <h1 style={styles.title}>
-          Visa Consultancy Operational <br />
-          <span style={styles.titleGradient}>Intelligence Platform</span>
+          Smart Visa Consultancy & <br />
+          <span style={styles.titleGradient}>Case Management Platform</span>
         </h1>
         <p style={styles.subtitle}>
-          Simplify core client workflows, automate heuristic risk evaluation, and manage document compliance inside an isolated single-tenant modular runtime environment.
+          Streamline client management, automate application tracking, and manage document compliance effortlessly in one secure portal.
         </p>
 
         <div style={styles.ctaRow}>
           <Link href="/register" className="btn-primary" style={{ padding: '16px 36px', fontSize: '1.05rem', textDecoration: 'none' }}>
-            Initialize Workspace
+            Get Started
           </Link>
           <Link href="/login" className="btn-secondary" style={{ padding: '16px 36px', fontSize: '1.05rem', textDecoration: 'none' }}>
-            Access Environment
+            Sign In
           </Link>
         </div>
       </section>
@@ -50,32 +49,32 @@ export default function LandingPage() {
       <section style={styles.featuresSection}>
         <div className="glass-card" style={styles.featureCard}>
           <div style={styles.iconCircle}>📂</div>
-          <h3 style={styles.featTitle}>Case Lifecycle Management</h3>
+          <h3 style={styles.featTitle}>Visa Case Tracking</h3>
           <p style={styles.featDesc}>
-            Log client folders, track Stage transitions (Created to Approved), and capture real-time system audit timelines.
+            Easily manage client files, track application progress from creation to final approval, and maintain complete records.
           </p>
         </div>
 
         <div className="glass-card" style={styles.featureCard}>
           <div style={styles.iconCircle}>⚡</div>
-          <h3 style={styles.featTitle}>Heuristic Threat Tracker</h3>
+          <h3 style={styles.featTitle}>Automated Compliance Checks</h3>
           <p style={styles.featDesc}>
-            Calculate case risk metrics instantly based on missing required document files and verification backlogs.
+            Instantly identify missing documents, missing requirements, and potential issues before submitting applications.
           </p>
         </div>
 
         <div className="glass-card" style={styles.featureCard}>
           <div style={styles.iconCircle}>🔒</div>
-          <h3 style={styles.featTitle}>Multi-Tenant Isolation</h3>
+          <h3 style={styles.featTitle}>Enterprise Data Security</h3>
           <p style={styles.featDesc}>
-            Separate tenant scope dynamically using JWT claims to enforce PostgreSQL database schema boundaries automatically.
+            Keep all client documents and firm data private, safe, and isolated with high-grade security standards.
           </p>
         </div>
       </section>
 
       {/* Footer */}
       <footer style={styles.footer}>
-        <p>© 2026 VisaFlow Solutions. Powered by Spring Boot 3.4.1 Modular Monolith.</p>
+        <p>© 2026 VisaFlow Solutions. Empowering visa agencies worldwide.</p>
       </footer>
     </div>
   );

@@ -1,6 +1,7 @@
 package com.visaflow.config;
 
 import com.visaflow.modules.auth.security.JwtAuthenticationFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,12 +41,22 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(ex -> ex
+                // Return 401 (not 403) when no valid token is present so the frontend
+                // 401-interceptor can trigger a token refresh or redirect to login.
+                .authenticationEntryPoint((request, response, authException) ->
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                .accessDeniedHandler((request, response, accessDeniedException) ->
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
+            )
             .authorizeHttpRequests(auth -> auth
                 // Public auth endpoints
                 .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register",
                         "/api/auth/refresh", "/api/auth/verify-email").permitAll()
                 // Actuator health check
                 .requestMatchers("/actuator/health").permitAll()
+                // Local dev file serving (active only when MinIO is unavailable)
+                .requestMatchers(HttpMethod.GET, "/api/files/**").permitAll()
                 // Everything else requires authentication
                 .anyRequest().authenticated()
             )

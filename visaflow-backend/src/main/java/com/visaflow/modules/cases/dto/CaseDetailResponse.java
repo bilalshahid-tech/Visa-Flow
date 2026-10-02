@@ -1,5 +1,6 @@
 package com.visaflow.modules.cases.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -25,12 +26,25 @@ public class CaseDetailResponse {
     private String clientPhone;
     private String clientEmail;
 
-    // Visa type summary
+    // Visa program (new) — kept alongside old visaType for backward compat
+    private UUID visaProgramId;
+    private String visaProgramName;
+    private String jobRoleCategory;
+
+    // Legacy visa type — still populated for old cases that pre-date the migration
     private UUID visaTypeId;
     private String visaTypeCode;
     private String visaTypeName;
 
-    // Checklist: requirements with uploaded doc status
+    // Stage stepper (new) — null/empty for old cases
+    private List<StageResponse> stages;
+    private String currentStageId;
+    private String currentStageName;
+
+    // Current stage checklist with conditional evaluation applied (new)
+    private List<StageChecklistItemResponse> currentStageChecklist;
+
+    // Legacy flat checklist — kept for old cases (visa_type-based flow)
     private List<ChecklistItemResponse> checklist;
     private int checklistTotal;
     private int checklistUploaded;
@@ -47,6 +61,47 @@ public class CaseDetailResponse {
     private LocalDateTime updatedAt;
     private String createdBy;
 
+    // -------------------------------------------------------------------------
+    // Nested response types
+    // -------------------------------------------------------------------------
+
+@Data
+@Builder
+public static class StageResponse {
+    private UUID id;
+    private int sequenceOrder;
+    private String name;
+    private String description;
+
+    @JsonProperty("isCurrent")
+    private boolean isCurrent;
+
+    @JsonProperty("isCompleted")
+    private boolean isCompleted;
+
+    private LocalDateTime enteredAt;
+    private LocalDateTime completedAt;
+}
+
+    /** Stage-aware checklist item — tied to a StageDocumentRequirement */
+    @Data
+    @Builder
+    public static class StageChecklistItemResponse {
+        private UUID requirementId;         // StageDocumentRequirement.id
+        private String documentType;
+        private String displayName;
+        private boolean mandatory;           // base is_mandatory flag
+        private boolean conditionallyMandatory; // true when conditional field matches
+        private String notes;
+        private int displayOrder;
+        // Uploaded document (null if not yet uploaded for this stage requirement)
+        private UUID documentId;
+        private String documentStatus;       // PENDING_REVIEW, APPROVED, REJECTED, or null
+        private String originalFilename;
+        private String reviewerNotes;
+    }
+
+    /** Legacy checklist item (kept for old visa_type-based cases) */
     @Data
     @Builder
     public static class ChecklistItemResponse {
@@ -55,9 +110,8 @@ public class CaseDetailResponse {
         private String label;
         private boolean mandatory;
         private int displayOrder;
-        // Uploaded document (null if not yet uploaded)
         private UUID documentId;
-        private String documentStatus; // PENDING, APPROVED, REJECTED, or null
+        private String documentStatus;
         private String originalFilename;
         private String reviewerNotes;
     }

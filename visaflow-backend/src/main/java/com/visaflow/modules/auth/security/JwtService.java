@@ -31,12 +31,12 @@ public class JwtService {
 
     public UUID extractUserId(String token) {
         String id = extractClaim(token, claims -> claims.get("user_id", String.class));
-        return id != null ? UUID.fromString(id) : null;
+        return (id != null && !id.trim().isEmpty()) ? UUID.fromString(id) : null;
     }
 
     public UUID extractCompanyId(String token) {
         String id = extractClaim(token, claims -> claims.get("company_id", String.class));
-        return id != null ? UUID.fromString(id) : null;
+        return (id != null && !id.trim().isEmpty()) ? UUID.fromString(id) : null;
     }
 
     public String extractRole(String token) {

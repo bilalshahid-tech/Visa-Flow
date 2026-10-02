@@ -102,11 +102,11 @@ export default function RegisterPage() {
       <div className="glass-card" style={styles.card}>
         <div style={styles.logoSec}>
           <span style={styles.logoGradient}>VisaFlow</span>
-          <p style={styles.subtitle}>Modular Enterprise Platform</p>
+          <p style={styles.subtitle}>Visa Consultancy Platform</p>
         </div>
 
         <h2 style={styles.title}>Create Firm Account</h2>
-        <p style={styles.subtext}>Register your company instance to begin onboarding clients</p>
+        <p style={styles.subtext}>Register your agency to start managing visa clients</p>
 
         {error && <div style={styles.errorAlert}>{error}</div>}
 

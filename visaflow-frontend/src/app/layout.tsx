@@ -2,8 +2,8 @@ import React from 'react';
 import './globals.css';
 
 export const metadata = {
-  title: 'VisaFlow - Visa Consultancy Modular Platform',
-  description: 'High-performance modular enterprise platform for visa consultancy case management.',
+  title: 'VisaFlow - Visa Consultancy Management Platform',
+  description: 'Streamlined platform for visa consultancy case management.',
 };
 
 export default function RootLayout({

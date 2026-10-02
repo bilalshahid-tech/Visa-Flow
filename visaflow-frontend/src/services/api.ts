@@ -142,5 +142,9 @@ export async function apiFetch<T>(endpoint: string, options: ApiRequestOptions =
     return {} as T;
   }
 
-  return response.json();
+  const contentType = response.headers.get('Content-Type');
+  if (contentType && contentType.includes('application/json')) {
+    return response.json();
+  }
+  return response.text() as any;
 }

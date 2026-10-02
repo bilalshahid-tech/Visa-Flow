@@ -59,11 +59,11 @@ export default function LoginPage() {
       <div className="glass-card" style={styles.card}>
         <div style={styles.logoSec}>
           <span style={styles.logoGradient}>VisaFlow</span>
-          <p style={styles.subtitle}>Modular Enterprise Platform</p>
+          <p style={styles.subtitle}>Visa Consultancy Platform</p>
         </div>
 
         <h2 style={styles.title}>Welcome Back</h2>
-        <p style={styles.subtext}>Enter your credentials to enter the workspace</p>
+        <p style={styles.subtext}>Sign in to access your portal</p>
 
         {error && <div style={styles.errorAlert}>{error}</div>}
 

@@ -140,7 +140,13 @@ export default function CasesPage() {
                     {c.caseReference}
                   </td>
                   <td style={{ padding: '16px 24px', color: 'var(--text-main)' }}>
-                    {c.clientName || '—'}
+                    {c.clientId ? (
+                      <Link href={`/dashboard/clients/${c.clientId}`} style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>
+                        {c.clientName || '—'}
+                      </Link>
+                    ) : (
+                      c.clientName || '—'
+                    )}
                   </td>
                   <td style={{ padding: '16px 24px', color: 'var(--text-muted)' }}>
                     {c.visaTypeName || c.visaTypeCode || '—'}

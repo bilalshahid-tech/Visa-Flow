@@ -33,9 +33,13 @@ public class Document {
     @Column(name = "uploaded_by", nullable = false)
     private UUID uploadedBy;
 
-    /** FK to cases.document_requirements — null means ad-hoc upload */
+    /** FK to cases.document_requirements — legacy; null for new-style uploads */
     @Column(name = "requirement_id")
     private UUID requirementId;
+
+    /** FK to cases.stage_document_requirements — set for new stage-aware uploads */
+    @Column(name = "stage_document_requirement_id")
+    private UUID stageDocumentRequirementId;
 
     @Column(name = "original_filename", nullable = false, length = 500)
     private String originalFilename;

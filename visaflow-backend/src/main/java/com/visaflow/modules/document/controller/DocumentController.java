@@ -22,15 +22,16 @@ public class DocumentController {
 
     private final DocumentService documentService;
 
-    /** Upload a document — optionally against a checklist requirement */
+    /** Upload a document — against a stage requirement (new) or a legacy flat requirement */
     @PostMapping
     public ResponseEntity<Document> upload(
             @PathVariable UUID caseId,
             @RequestParam(required = false) UUID requirementId,
+            @RequestParam(required = false) UUID stageDocumentRequirementId,
             @RequestParam MultipartFile file,
             @AuthenticationPrincipal UserPrincipal principal) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(documentService.uploadDocument(caseId, requirementId, file, principal));
+                .body(documentService.uploadDocument(caseId, requirementId, stageDocumentRequirementId, file, principal));
     }
 
     /** Returns a 5-minute pre-signed URL to view/preview the document */

@@ -41,6 +41,12 @@ public class CaseService {
     private final CaseStateMachine stateMachine;
     private final ApplicationEventPublisher eventPublisher;
 
+    // New stage-aware dependencies
+    private final VisaProgramRepository visaProgramRepository;
+    private final VisaProgramStageRepository visaProgramStageRepository;
+    private final CaseStageHistoryRepository caseStageHistoryRepository;
+    private final ProgramStageService programStageService;
+
     // -------------------------------------------------------------------------
     // Create case
     // -------------------------------------------------------------------------
@@ -50,15 +56,25 @@ public class CaseService {
         Client client = clientRepository.findByIdAndCompanyId(request.getClientId(), principal.getCompanyId())
                 .orElseThrow(() -> new AccessDeniedException("Client not found or does not belong to your consultancy"));
 
-        VisaType visaType = visaTypeRepository.findById(request.getVisaTypeId())
-                .orElseThrow(() -> new EntityNotFoundException("Visa type not found: " + request.getVisaTypeId()));
+        // Load the VisaProgram — required for new cases
+        VisaProgram visaProgram = visaProgramRepository.findById(request.getVisaProgramId())
+                .orElseThrow(() -> new EntityNotFoundException("Visa program not found: " + request.getVisaProgramId()));
 
-        String caseRef = generateCaseReference(principal.getCompanyId(), visaType.getCode());
+        // First stage for this program
+        VisaProgramStage firstStage = visaProgramStageRepository
+                .findFirstByVisaProgramIdOrderBySequenceOrderAsc(visaProgram.getId())
+                .orElseThrow(() -> new IllegalStateException("Visa program has no stages configured: " + visaProgram.getId()));
+
+        // Generate case reference using program name slug
+        String programCode = visaProgram.getName().replaceAll("[^A-Za-z]", "").substring(0, Math.min(6, visaProgram.getName().replaceAll("[^A-Za-z]", "").length())).toUpperCase();
+        String caseRef = generateCaseReferenceWithCode(principal.getCompanyId(), programCode);
 
         VisaCase visaCase = VisaCase.builder()
                 .companyId(principal.getCompanyId())
                 .client(client)
-                .visaType(visaType)
+                .visaProgram(visaProgram)
+                .currentStage(firstStage)
+                .jobRoleCategory(request.getJobRoleCategory())
                 .caseReference(caseRef)
                 .status(CaseStatus.DRAFT)
                 .submissionDate(request.getSubmissionDate())
@@ -69,8 +85,15 @@ public class CaseService {
 
         visaCase = caseRepository.save(visaCase);
 
-        log.info("Case created: ref={} clientId={} visaType={} company={}",
-                caseRef, client.getId(), visaType.getCode(), principal.getCompanyId());
+        // Record initial stage history entry
+        CaseStageHistory initialHistory = CaseStageHistory.builder()
+                .visaCase(visaCase)
+                .stage(firstStage)
+                .build();
+        caseStageHistoryRepository.save(initialHistory);
+
+        log.info("Case created: ref={} clientId={} program='{}' firstStage='{}' company={}",
+                caseRef, client.getId(), visaProgram.getName(), firstStage.getName(), principal.getCompanyId());
 
         eventPublisher.publishEvent(new CaseEvent(this, visaCase.getId(), visaCase.getCompanyId(),
                 principal.getUserId(), principal.getEmail(), "CASE_CREATED", null, CaseStatus.DRAFT.name()));
@@ -187,7 +210,25 @@ public class CaseService {
     // -------------------------------------------------------------------------
 
     private CaseDetailResponse buildDetailResponse(VisaCase visaCase, UserPrincipal principal) {
-        // Build checklist: requirements + uploaded docs mapped by requirementId
+
+        // Auto-heal cases that completed all stages but were left in DRAFT or DOCS_PENDING
+        if (visaCase.getVisaProgram() != null && visaCase.getCurrentStage() == null
+                && (visaCase.getStatus() == CaseStatus.DRAFT || visaCase.getStatus() == CaseStatus.DOCS_PENDING)) {
+            visaCase.setStatus(CaseStatus.SUBMITTED);
+            visaCase = caseRepository.save(visaCase);
+        }
+
+        // ── Stage stepper (new model) ──────────────────────────────────────────
+        List<CaseDetailResponse.StageResponse> stages = programStageService.buildStageStepper(visaCase);
+
+        // Current stage checklist (conditionals evaluated)
+        List<CaseDetailResponse.StageChecklistItemResponse> currentStageChecklist = List.of();
+        if (visaCase.getCurrentStage() != null) {
+            currentStageChecklist = programStageService
+                    .buildStageChecklistInternal(visaCase, visaCase.getCurrentStage().getId());
+        }
+
+        // ── Legacy flat checklist (old visa_type model — kept for old cases) ───
         List<DocumentRequirement> requirements = visaCase.getVisaType() != null
                 ? requirementRepository.findByVisaTypeIdOrderByDisplayOrderAsc(visaCase.getVisaType().getId())
                 : List.of();
@@ -216,7 +257,7 @@ public class CaseService {
 
         long uploaded = checklist.stream().filter(c -> c.getDocumentId() != null).count();
 
-        // Status history
+        // ── Status history ─────────────────────────────────────────────────────
         List<CaseStatusHistory> historyRows = visaCase.getStatusHistory();
         List<CaseDetailResponse.StatusHistoryResponse> historyResponse = historyRows.stream()
                 .map(h -> CaseDetailResponse.StatusHistoryResponse.builder()
@@ -228,7 +269,7 @@ public class CaseService {
                         .build())
                 .collect(Collectors.toList());
 
-        // Notes
+        // ── Notes ──────────────────────────────────────────────────────────────
         List<CaseNote> notes = noteRepository.findByVisaCaseIdOrderByCreatedAtAsc(visaCase.getId());
         Map<UUID, String> userEmailCache = new HashMap<>();
         List<CaseDetailResponse.NoteResponse> noteResponses = notes.stream().map(n -> {
@@ -241,6 +282,8 @@ public class CaseService {
 
         Client client = visaCase.getClient();
         VisaType vt = visaCase.getVisaType();
+        VisaProgram vp = visaCase.getVisaProgram();
+        VisaProgramStage cs = visaCase.getCurrentStage();
 
         return CaseDetailResponse.builder()
                 .id(visaCase.getId())
@@ -248,7 +291,8 @@ public class CaseService {
                 .caseReference(visaCase.getCaseReference())
                 .status(friendlyStatus(visaCase.getStatus().name()))
                 .allowedTransitions(stateMachine.getAllowedTransitions(visaCase.getStatus())
-                        .stream().map(s -> friendlyStatus(s.name())).collect(Collectors.toList()))
+                        .stream().map(Enum::name).collect(Collectors.toList()))
+                // Client
                 .clientId(client != null ? client.getId() : null)
                 .clientName(client != null ? client.getFullName() : null)
                 .clientPassportNumber(client != null ? client.getPassportNumber() : null)
@@ -256,12 +300,24 @@ public class CaseService {
                 .clientDateOfBirth(client != null ? client.getDateOfBirth().toString() : null)
                 .clientPhone(client != null ? client.getPhone() : null)
                 .clientEmail(client != null ? client.getEmail() : null)
+                // New program fields
+                .visaProgramId(vp != null ? vp.getId() : null)
+                .visaProgramName(vp != null ? vp.getName() : null)
+                .jobRoleCategory(visaCase.getJobRoleCategory())
+                // Stages
+                .stages(stages)
+                .currentStageId(cs != null ? cs.getId().toString() : null)
+                .currentStageName(cs != null ? cs.getName() : null)
+                .currentStageChecklist(currentStageChecklist)
+                // Legacy visa type (for old cases)
                 .visaTypeId(vt != null ? vt.getId() : null)
                 .visaTypeCode(vt != null ? vt.getCode() : null)
                 .visaTypeName(vt != null ? vt.getName() : null)
+                // Legacy flat checklist (for old cases)
                 .checklist(checklist)
                 .checklistTotal(checklist.size())
                 .checklistUploaded((int) uploaded)
+                // Common
                 .statusHistory(historyResponse)
                 .notes(noteResponses)
                 .assignedStaffId(visaCase.getAssignedStaffId())
@@ -272,11 +328,14 @@ public class CaseService {
                 .build();
     }
 
-    private String generateCaseReference(UUID companyId, String visaCode) {
+    private String generateCaseReferenceWithCode(UUID companyId, String code) {
         int year = LocalDateTime.now().getYear();
-        // Use count-based sequence per company+visaCode+year
         long count = caseRepository.count() + 1;
-        return String.format("VF-%d-%s-%05d", year, visaCode, count);
+        return String.format("VF-%d-%s-%05d", year, code, count);
+    }
+
+    private String generateCaseReference(UUID companyId, String visaCode) {
+        return generateCaseReferenceWithCode(companyId, visaCode);
     }
 
     private CaseResponse toCaseResponse(VisaCase c) {

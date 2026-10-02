@@ -60,13 +60,8 @@ class CaseStateMachineTest {
                 .hasMessageContaining("DRAFT");
     }
 
-    @Test void draft_to_submitted_isInvalid() {
-        assertThatThrownBy(() -> machine.validateTransition(CaseStatus.DRAFT, CaseStatus.SUBMITTED))
-                .isInstanceOf(InvalidStatusTransitionException.class);
-    }
-
-    @Test void closed_to_draft_isInvalid() {
-        assertThatThrownBy(() -> machine.validateTransition(CaseStatus.CLOSED, CaseStatus.DRAFT))
+    @Test void closed_to_approved_isInvalid() {
+        assertThatThrownBy(() -> machine.validateTransition(CaseStatus.CLOSED, CaseStatus.APPROVED))
                 .isInstanceOf(InvalidStatusTransitionException.class)
                 .hasMessageContaining("CLOSED");
     }
@@ -78,18 +73,18 @@ class CaseStateMachineTest {
 
     // ---- getAllowedTransitions ----
 
-    @Test void draft_allowedTransitions_containsDocsPending() {
+    @Test void draft_allowedTransitions_containsDocsPendingUnderReviewSubmitted() {
         List<CaseStatus> allowed = machine.getAllowedTransitions(CaseStatus.DRAFT);
-        assertThat(allowed).containsExactly(CaseStatus.DOCS_PENDING);
+        assertThat(allowed).containsExactlyInAnyOrder(CaseStatus.DOCS_PENDING, CaseStatus.UNDER_REVIEW, CaseStatus.SUBMITTED);
     }
 
-    @Test void closed_allowedTransitions_isEmpty() {
+    @Test void closed_allowedTransitions_containsReopenOptions() {
         List<CaseStatus> allowed = machine.getAllowedTransitions(CaseStatus.CLOSED);
-        assertThat(allowed).isEmpty();
+        assertThat(allowed).containsExactlyInAnyOrder(CaseStatus.DRAFT, CaseStatus.DOCS_PENDING, CaseStatus.UNDER_REVIEW);
     }
 
-    @Test void submitted_allowedTransitions_containsApprovedAndRejected() {
+    @Test void submitted_allowedTransitions_containsApprovedRejectedUnderReviewDocsPending() {
         List<CaseStatus> allowed = machine.getAllowedTransitions(CaseStatus.SUBMITTED);
-        assertThat(allowed).containsExactlyInAnyOrder(CaseStatus.APPROVED, CaseStatus.REJECTED);
+        assertThat(allowed).containsExactlyInAnyOrder(CaseStatus.APPROVED, CaseStatus.REJECTED, CaseStatus.UNDER_REVIEW, CaseStatus.DOCS_PENDING);
     }
 }
