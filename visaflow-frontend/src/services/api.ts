@@ -1,6 +1,10 @@
 /* Standardized API client for VisaFlow modular backend */
 
-const API_BASE = '/api';
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE = rawApiUrl
+  ? (rawApiUrl.endsWith('/api') ? rawApiUrl : `${rawApiUrl.replace(/\/+$/, '')}/api`)
+  : '/api';
+
 
 export interface ApiRequestOptions extends RequestInit {
   bodyData?: any;
