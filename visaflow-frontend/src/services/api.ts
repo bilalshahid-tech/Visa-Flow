@@ -136,6 +136,9 @@ export async function apiFetch<T>(endpoint: string, options: ApiRequestOptions =
       const errorData = await response.json();
       errorMessage = errorData.detail || errorData.message || errorMessage;
       detailMessage = errorData.cause || '';
+      if (detailMessage) {
+        errorMessage = `${errorMessage}: ${detailMessage}`;
+      }
     } catch (e) {
       // payload not JSON
     }
