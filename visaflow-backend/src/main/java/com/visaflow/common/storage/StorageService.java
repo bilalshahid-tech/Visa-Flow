@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import okhttp3.OkHttpClient;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,8 +24,7 @@ import java.util.concurrent.TimeUnit;
  * • When MinIO is NOT reachable (local dev): falls back to local disk under
  *   FILE_UPLOAD_DIR and returns a direct /api/files/{key} URL.
  *
- * The mode is chosen once at startup (eager probe in constructor). No config
- * change is needed — it auto-detects based on reachability.
+ * The mode is chosen once at startup (eager probe in constructor with 2s timeout).
  */
 @Slf4j
 @Service
@@ -51,11 +51,18 @@ public class StorageService {
         this.uploadDir = uploadDir;
         this.appBaseUrl = appBaseUrl;
 
-        // Probe MinIO availability once at startup
+        // Probe MinIO availability with a strict 2-second timeout to avoid hanging startup if unreachable
         try {
+            OkHttpClient httpClient = new OkHttpClient.Builder()
+                    .connectTimeout(2, TimeUnit.SECONDS)
+                    .writeTimeout(2, TimeUnit.SECONDS)
+                    .readTimeout(2, TimeUnit.SECONDS)
+                    .build();
+
             MinioClient client = MinioClient.builder()
                     .endpoint(endpoint)
                     .credentials(accessKey, secretKey)
+                    .httpClient(httpClient)
                     .region("us-east-1")
                     .build();
             boolean exists = client.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
@@ -69,6 +76,7 @@ public class StorageService {
             this.presignMinioClient = MinioClient.builder()
                     .endpoint(externalUrl)
                     .credentials(accessKey, secretKey)
+                    .httpClient(httpClient)
                     .region("us-east-1")
                     .build();
 

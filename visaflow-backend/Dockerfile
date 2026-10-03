@@ -22,11 +22,14 @@ VOLUME ["/app/uploads"]
 
 USER visaflow
 
-EXPOSE 8080
+EXPOSE 10000
 
 ENTRYPOINT ["java", \
   "-Djava.security.egd=file:/dev/./urandom", \
+  "-Djava.awt.headless=true", \
   "-XX:+UseContainerSupport", \
   "-XX:MaxRAMPercentage=75.0", \
+  "-XX:TieredStopAtLevel=1", \
   "-jar", "app.jar"]
+
 
